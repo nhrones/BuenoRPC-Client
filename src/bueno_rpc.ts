@@ -25,26 +25,6 @@ const callbacks: Map<RpcId, any> = new Map()
 let nextTxID = 0
 
 /** 
- * refresh css  
- */
-export function refreshCSS() {
-   if (DEBUG) console.log('refreshed css')
-   const sheets = [].slice.call(document.getElementsByTagName("link"));
-   const head = document.getElementsByTagName("head")[0];
-   for (let i = 0; i < sheets.length; ++i) {
-      const elem = sheets[i] as HTMLLinkElement;
-      const parent = elem.parentElement || head;
-      parent.removeChild(elem);
-      const rel = elem.rel;
-      if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-         const url = elem.href.replace(/(&|\?)_cacheOverride=d+/, '');
-         elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-      }
-      parent.appendChild(elem);
-   }
-}
-
-/** 
  * Post a message to our SSE-RPC-server     
  * We give each message a unique transaction ID.    
  * We then create/save a callback with this ID.    

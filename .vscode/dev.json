@@ -5,6 +5,6 @@
       "Entry": [
          "./src/bueno_rpc.ts"
       ],
-      "Minify": false
+      "Minify": true
    }
 }
