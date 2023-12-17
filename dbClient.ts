@@ -1,14 +1,17 @@
 // deno-lint-ignore-file no-explicit-any
 
+import { ctx, ServiceType } from './context.ts'
+let { DBServiceURL, DEBUG, registrationURL, requestURL } = ctx
+
 //let LOCAL_DEV = false
 //==========================================
 //  uncomment below to run a local service
 //const LOCAL_DEV = true
 //  otherwise, run the Deno-Deploy service
 //==========================================
-const DEBUG = false
+
 let nextMsgID = 0;
-let DBServiceURL = ''
+//let DBServiceURL = ''
 const transactions = new Map();
 
 /**
@@ -18,19 +21,38 @@ export class DbClient {
 
    querySet = []
 
-   constructor(serviceURL: string) {
+   constructor(serviceURL: string, serviceType: ServiceType) {
+
       //fix url ending
       DBServiceURL = (serviceURL.endsWith('/'))
-      ? serviceURL
-      : serviceURL += '/';
+         ? serviceURL
+         : serviceURL += '/';
+
+      switch (serviceType) {
+         case "IO":
+            registrationURL = DBServiceURL + 'SSERPC/ioRegistration',
+            requestURL = DBServiceURL + 'SSERPC/ioRequest'
+            break;
+         case "KV":
+            registrationURL = DBServiceURL + 'SSERPC/kvRegistration',
+            requestURL = DBServiceURL + 'SSERPC/kvRequest'
+            break;  
+         case "RELAY":
+            registrationURL = DBServiceURL + 'SSERPC/relayRegistration',
+            requestURL = DBServiceURL + 'SSERPC/relayRequest'
+            break;    
+         default:
+            break;
+      }
    }
+
    /** initialize our EventSource and fetch some data */
-   init(registrationURL: string): Promise<void> {
+   init(): Promise<void> {
       return new Promise((resolve, reject) => {
          let connectAttemps = 0
          console.log("CONNECTING");
          
-         const eventSource = new EventSource(DBServiceURL + registrationURL );
+         const eventSource = new EventSource(registrationURL );
 
          eventSource.addEventListener("open", () => {
             console.log("CONNECTED");
@@ -174,7 +196,7 @@ See: readme.md.`)
  *   When this promise resolves or rejects, the transaction is retrieved by ID    
  *   and executed by the promise. 
  */
-export const rpcRequest = (procedure: any, params: any, requestURL = 'SSERPC/kvRequest') => {
+export const rpcRequest = (procedure: any, params: any) => {
    // increment our tranaction id
    const txID = nextMsgID++;
    return new Promise((resolve, reject) => {
@@ -183,7 +205,7 @@ export const rpcRequest = (procedure: any, params: any, requestURL = 'SSERPC/kvR
          if (error) return reject(new Error(error));
          resolve(result);
       });
-      fetch(DBServiceURL+requestURL, {
+      fetch(requestURL, {
          method: "POST",
          mode: 'no-cors',
          body: JSON.stringify({ txID, procedure, params })
