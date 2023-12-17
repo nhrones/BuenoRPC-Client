@@ -48,6 +48,7 @@ export const rpcRequest = (procedure: RpcProcedure, params: RpcParams) => {
       if (DEBUG) console.log(`fetch called: ${procedure}`)
       fetch(postURL, {
          method: "POST",
+         mode: 'no-cors',
          body: JSON.stringify({ txID: newTxID, procedure: procedure, params: params }),
       });
    })
