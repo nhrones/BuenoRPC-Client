@@ -1,7 +1,7 @@
 # BuenoRPC Client
 
 This client library implements asynchronous tranactions to a remote BuenoRPC broker service.    
-It implements strongly-typed transaction-based procedure calls.    
+It implements strongly-typed transaction-based Remote Procedure Calls.    
 The services provided include:
   - Deno-Kv remote procedures - CRUD + lists, bulk load/delete, 
   - FileIO remote procedures - get-all, get-content, save-content
