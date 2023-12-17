@@ -17,7 +17,7 @@ const regtURL = (local)
 
 
 /** 
- * Map of callbacks keyed by txID 
+ * A Map of transaction promise-callbacks keyed by txID 
  */
 const callbacks: Map<RpcId, any> = new Map()
 
