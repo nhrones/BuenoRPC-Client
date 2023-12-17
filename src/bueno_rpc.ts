@@ -22,7 +22,7 @@ console.log(`Running from ${postURL}`)
 /** 
  * A Map of transaction promise-callbacks keyed by txID 
  */
-const callbacks: Map<RpcId, any> = new Map()
+const transactions: Map<RpcId, any> = new Map()
 
 /** ID number generator */
 let nextTxID = 0
@@ -41,7 +41,7 @@ export const rpcRequest = (procedure: RpcProcedure, params: RpcParams) => {
    const newTxID: RpcId = nextTxID++
    return new Promise((resolve, reject) => {
       // create a unique promise callback and save it with this txID
-      callbacks.set(newTxID, (error: any, result: any) => {
+      transactions.set(newTxID, (error: any, result: any) => {
          if (error) return reject(new Error(error.message))
          resolve(result)
       })
@@ -87,18 +87,17 @@ export const initComms = () => {
       // When we get a message from the server, we expect 
       // an object containing {msgID, error, and result}.
       // We find the callback that was registered for this ID, 
-      // and call it with the error and result properities.
+      // and execute it with the error and result properities.
       // This will resolve or reject the promise that was
       // returned to the client when the callback was created.
-      events.onmessage = (e) => {
-         const { data } = e
-         if (DEBUG) console.info('events.onmessage - ', data)
-         const parsed = JSON.parse(data)
-         const { txID, error, result } = parsed    // unpack
-         if (!callbacks.has(txID)) return;         // check                  
-         const callback = callbacks.get(txID)      // fetch
-         callbacks.delete(txID)                    // clean up
-         callback(error, result)                   // execute
+      events.onmessage = (evt) => {
+         if (DEBUG) console.info('events.onmessage - ', evt.data)
+         const parsed = JSON.parse( evt.data)
+         const { txID, error, result } = parsed          // unpack
+         if (!transactions.has(txID)) return;            // check                  
+         const transaction = transactions.get(txID)      // fetch
+         transactions.delete(txID)                       // clean up
+         if (transaction) transaction(error, result)     // execute
       }
    })
 }
