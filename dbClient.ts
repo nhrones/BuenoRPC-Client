@@ -25,12 +25,12 @@ export class DbClient {
       : serviceURL += '/';
    }
    /** initialize our EventSource and fetch some data */
-   init(): Promise<void> {
+   init(registrationURL: string): Promise<void> {
       return new Promise((resolve, reject) => {
          let connectAttemps = 0
          console.log("CONNECTING");
          
-         const eventSource = new EventSource(DBServiceURL + "SSERPC/kvRegistration");
+         const eventSource = new EventSource(DBServiceURL + registrationURL );
 
          eventSource.addEventListener("open", () => {
             console.log("CONNECTED");
