@@ -5,16 +5,19 @@
 
 import { RpcId, RpcProcedure, RpcParams } from './constants.ts'
 
-const DEBUG = false
+const RunningLocal = (window.location.href === "http://localhost:8080/");
+const DEBUG = RunningLocal
+console.log(`RunningLocal`, RunningLocal);
 
-const local = false
-const postURL = (local)
+const postURL = (RunningLocal)
    ? "http://localhost:9099/SSERPC/ioRequest"
    : "https://bueno-rpc.deno.dev/SSERPC/ioRequest";
-const regtURL = (local)
+   
+const regtURL = (RunningLocal)
    ? "http://localhost:9099/SSERPC/ioRegistration"
    : "https://bueno-rpc.deno.dev/SSERPC/ioRegistration";
-
+   
+console.log(`Running from ${postURL}`)
 
 /** 
  * A Map of transaction promise-callbacks keyed by txID 
