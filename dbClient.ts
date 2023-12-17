@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
 
-import { ctx, ServiceType } from './context.ts'
-let { DBServiceURL, DEBUG, registrationURL, requestURL } = ctx
+import { CTX, ServiceType } from './context.ts'
+let { DBServiceURL, DEBUG, registrationURL, requestURL } = CTX
 
 //let LOCAL_DEV = false
 //==========================================
