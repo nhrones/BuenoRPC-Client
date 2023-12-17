@@ -23,7 +23,7 @@ Any text content will then be presented in the text presentation control.
 
 The Kv-TreeView example app, exersizes the `Deno-Kv remote procedures`.    
 It initially makes a call to get all records from the target remote KvDB     
-    (see the **_Fresh Deploy_Example** data above).    
+    (see the **_Fresh Deploy_Example_** data above).    
 The kv-records returned are then loaded in a treeview UI.     
 This tree decomposes Kv-Multipart keys into a heirarchy.  
 
