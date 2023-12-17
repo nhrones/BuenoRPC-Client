@@ -5,7 +5,8 @@ It implements strongly-typed transaction-based procedure calls.
 The services provided include:
   - Deno-Kv remote procedures - CRUD + lists, bulk load/delete, 
   - FileIO remote procedures - get-all, get-content, save-content
-  - Generic Relay service (pubsub) - chat, games, etc.
+  - Relay - a generic streaming pubsub service - chat, games, etc.
+  - Future - Dafka -  a Kafka Clone using Deno-KV 
 
 ## Example Client Usage
 ## FileTree example -- https://github.com/nhrones/File-Tree
