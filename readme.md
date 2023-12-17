@@ -6,7 +6,7 @@ The services provided include:
   - Deno-Kv remote procedures - CRUD + lists, bulk load/delete, 
   - FileIO remote procedures - get-all, get-content, save-content
   - Relay - a generic streaming pubsub service - chat, games, etc.
-  - Future - Dafka -  a Kafka Clone using Deno-KV 
+  - _WIP - Dafka -  a Kafka Clone using Deno-KV_ - Q2-2024
 
 ## Example Client Usage
 ## FileTree example -- https://github.com/nhrones/File-Tree
