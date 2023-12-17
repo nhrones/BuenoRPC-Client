@@ -8,16 +8,16 @@ The services provided include:
   - Generic Relay service (pubsub) - chat, games, etc.
 
 ## Example Client Usage
-### FileTree example -- https://github.com/nhrones/File-Tree
+## FileTree example -- https://github.com/nhrones/File-Tree
 ![Alt text](IOTree.png)    
 
 The FileTree app (shown above) exersizes the BuenoRPC remote fileIO procedures.    
-This browser app makes calls to get file names and file content from the from the BuenoRPC broker.    
+This browser app makes calls to get file names and file content from the BuenoRPC broker.    
 The file name data returned is then loaded in a TreeView UI.    
 Selecting an item in the TreeView will request its content from the BuenoRPC broker.    
-Any text content will then be presented in a text editor control.    
+Any text content will then be presented in the text presentation control.    
 
-### Kv TreeView example -- https://github.com/nhrones/KvRPC_TreeClient
+## Kv TreeView example -- https://github.com/nhrones/KvRPC_TreeClient
 ![Alt text](KVTree.png)
 
 The Kv-TreeView example app, exersizes the `Deno-Kv remote procedures`.    
@@ -26,8 +26,8 @@ It initially makes a call to get all records from the target remote KvDB
 The kv-records returned are then loaded in a treeview UI.     
 This tree decomposes Kv-Multipart keys into a heirarchy.  
 
-## RPC
-All of this is accomplished by means of Remote Procedure Call transactions - RPC.     
+# RPC
+All of the above is accomplished by using Remote Procedure Call transactions - RPC.     
 
 ![Alt text](RPC.png)    
 
