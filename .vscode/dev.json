@@ -1,0 +1,10 @@
+{
+   "build": {
+      "Out": "",
+      "FileName": "mod.js",
+      "Entry": [
+         "./src/bueno_rpc.ts"
+      ],
+      "Minify": false
+   }
+}
