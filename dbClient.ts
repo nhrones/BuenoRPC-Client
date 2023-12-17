@@ -174,7 +174,7 @@ See: readme.md.`)
  *   When this promise resolves or rejects, the transaction is retrieved by ID    
  *   and executed by the promise. 
  */
-export const rpcRequest = (procedure: any, params: any) => {
+export const rpcRequest = (procedure: any, params: any, requestURL = 'SSERPC/kvRequest') => {
    // increment our tranaction id
    const txID = nextMsgID++;
    return new Promise((resolve, reject) => {
@@ -183,7 +183,7 @@ export const rpcRequest = (procedure: any, params: any) => {
          if (error) return reject(new Error(error));
          resolve(result);
       });
-      fetch(DBServiceURL+'SSERPC/kvRequest', {
+      fetch(DBServiceURL+requestURL, {
          method: "POST",
          mode: 'no-cors',
          body: JSON.stringify({ txID, procedure, params })
