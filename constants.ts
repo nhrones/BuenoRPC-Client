@@ -4,18 +4,18 @@ export const DEBUG = true
 //  RPC types 
 //=========================================================
 
-export type RpcId = number;
+export type TxID = number;
 export type RpcParams = JsonArray | JsonObject;
 export type RpcProcedure = string;
 
 export interface RpcRequest {
-    id: RpcId;
+    id: TxID;
     procedure: RpcProcedure;
     params?: RpcParams;
 }
 
 export interface RpcResponse {
-    id: RpcId;
+    id: TxID;
     error: JsonValue;
     result: JsonValue;
 }
@@ -40,3 +40,5 @@ export const ctx = {
    fileName: '',
    folderName: '',
 }
+
+export type PromiseType = (resolve: any, reject: any) => void

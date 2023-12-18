@@ -1,11 +1,11 @@
 // deno-lint-ignore-file no-explicit-any
-
+import type { PromiseType, TxID } from './constants.ts'
 import { CTX, ServiceType } from './context.ts'
 let { DBServiceURL, DEBUG, registrationURL, requestURL } = CTX
 
-let nextTxID = 0;
+let nextTxID: TxID = 0;
 
-const transactions = new Map();
+const transactions:Map<number, PromiseType> = new Map();
 
 /**
  * This db client communicates with an RPC service.    
