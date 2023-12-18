@@ -3,15 +3,8 @@
 import { CTX, ServiceType } from './context.ts'
 let { DBServiceURL, DEBUG, registrationURL, requestURL } = CTX
 
-//let LOCAL_DEV = false
-//==========================================
-//  uncomment below to run a local service
-//const LOCAL_DEV = true
-//  otherwise, run the Deno-Deploy service
-//==========================================
+let nextTxID = 0;
 
-let nextMsgID = 0;
-//let DBServiceURL = ''
 const transactions = new Map();
 
 /**
@@ -21,6 +14,11 @@ export class DbClient {
 
    querySet = []
 
+   /**
+    * Creates a new DBClient instance
+    * @param serviceURL - the url for the RPC service
+    * @param serviceType - the type of service to register for
+    */
    constructor(serviceURL: string, serviceType: ServiceType) {
 
       //fix url ending
@@ -31,35 +29,39 @@ export class DbClient {
       switch (serviceType) {
          case "IO":
             registrationURL = DBServiceURL + 'SSERPC/ioRegistration',
-            requestURL = DBServiceURL + 'SSERPC/ioRequest'
+               requestURL = DBServiceURL + 'SSERPC/ioRequest'
             break;
          case "KV":
             registrationURL = DBServiceURL + 'SSERPC/kvRegistration',
-            requestURL = DBServiceURL + 'SSERPC/kvRequest'
-            break;  
+               requestURL = DBServiceURL + 'SSERPC/kvRequest'
+            break;
          case "RELAY":
             registrationURL = DBServiceURL + 'SSERPC/relayRegistration',
-            requestURL = DBServiceURL + 'SSERPC/relayRequest'
-            break;    
+               requestURL = DBServiceURL + 'SSERPC/relayRequest'
+            break;
          default:
             break;
       }
    }
 
-   /** initialize our EventSource and fetch some data */
+   /** 
+    * initialize our EventSource and fetch initial data 
+    * */
    init(): Promise<void> {
+
       return new Promise((resolve, reject) => {
+
          let connectAttemps = 0
          console.log("CONNECTING");
-         
-         const eventSource = new EventSource(registrationURL );
 
-         eventSource.addEventListener("open", () => {
+         const eventSource = new EventSource(registrationURL);
+
+         eventSource.onopen = () => {
             console.log("CONNECTED");
             resolve()
-         });
+         };
 
-         eventSource.addEventListener("error", (_e) => {
+         eventSource.onerror = (_e) => {
             switch (eventSource.readyState) {
                case EventSource.OPEN:
                   console.log("CONNECTED");
@@ -80,16 +82,14 @@ See: readme.md.`)
                   reject()
                   break;
             }
-         });
+         };
 
-         /* 
-         When we get a message from the service we expect 
-         an object containing {msgID, error, and result}.
-         We then find the transaction that was registered for this msgID, 
-         and execute it with the error and result properities.
-         This will resolve or reject the promise that was
-         returned to the client when the transaction was created.
-         */
+         // When we get a message from the server, we expect 
+         // an object containing {msgID, error, and result}.
+         // We find the callback that was registered for this ID, 
+         // and execute it with the error and result properities.
+         // This will resolve or reject the promise that was
+         // returned to the client when the callback was created.
          eventSource.onmessage = (evt) => {
             if (DEBUG) console.info('events.onmessage - ', evt.data)
             const parsed = JSON.parse(evt.data);
@@ -107,14 +107,14 @@ See: readme.md.`)
     */
    fetchQuerySet() {
       return new Promise((resolve, _reject) => {
-      rpcRequest("GETALL", {})
-         .then((result) => {
-            if (typeof result === "string") {
-               resolve (JSON.parse(result))
-            } else {
-               console.log('Ooopppps: ', typeof result)
-            }
-         })
+         rpcRequest("GETALL", {})
+            .then((result) => {
+               if (typeof result === "string") {
+                  resolve(JSON.parse(result))
+               } else {
+                  console.log('Ooopppps: ', typeof result)
+               }
+            })
       })
    }
 
@@ -146,7 +146,7 @@ See: readme.md.`)
                //@ts-ignore ?
                rowsPerPage: this.rowsPerPage
             })
-            .then((result: any ) => {
+            .then((result: any) => {
                console.info('SET call returned ', result.querySet)
                this.querySet = result.querySet
                return this.querySet
@@ -173,6 +173,7 @@ See: readme.md.`)
          return { Error: _e }
       }
    }
+
    /** 
     * The `clearAll` method removes all records from the DB. 
     */
@@ -183,32 +184,39 @@ See: readme.md.`)
          return { Error: _e }
       }
    }
-} // End class
+}
 
 /** 
- * Make an Asynchronous Remote Proceedure Call
+ * Make an Asynchronous Remote Proceedure Call    
+ * Here we POST a message to our SSE-RPC-server.     
+ * We give each message a unique transaction ID.    
+ * We then create/save a callback with this ID.    
+ * Finally, we return a promise for this callback.     
+ * This is how we implement async transactions with    
+ * our SSE-RPC-server. Since most of the heavy lifting is    
+ * on the server, we never block the UI 
  *  
  * @param {key extends keyof TypedProcedures} procedure - the name of the remote procedure to be called
  * @param {TypedProcedures[key]} params - appropriately typed parameters for this procedure
  * 
  * @returns {Promise} - Promise object has a transaction that is stored by ID    
- *   in a transactions Set.   
+ *   in a transactions Map.   
  *   When this promise resolves or rejects, the transaction is retrieved by ID    
  *   and executed by the promise. 
  */
 export const rpcRequest = (procedure: any, params: any) => {
    // increment our tranaction id
-   const txID = nextMsgID++;
+   const thisID = nextTxID++;
    return new Promise((resolve, reject) => {
       // create a unique promise callback and save it with this txID
-      transactions.set(txID, (error: any, result: any) => {
+      transactions.set(thisID, (error: any, result: any) => {
          if (error) return reject(new Error(error));
          resolve(result);
       });
       fetch(requestURL, {
          method: "POST",
          mode: 'no-cors',
-         body: JSON.stringify({ txID, procedure, params })
+         body: JSON.stringify({ txID: thisID, procedure, params })
       });
    });
 };
