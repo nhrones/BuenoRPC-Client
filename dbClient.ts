@@ -89,7 +89,7 @@ See: readme.md.`)
          // We find the callback that was registered for this ID, 
          // and execute it with the error and result properities.
          // This will resolve or reject the promise that was
-         // returned to the client when the callback was created.
+         // returned to the client when the call was created.
          eventSource.onmessage = (evt) => {
             if (DEBUG) console.info('events.onmessage - ', evt.data)
             const parsed = JSON.parse(evt.data);
