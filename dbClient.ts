@@ -132,7 +132,7 @@ See: readme.md.`)
    /**
     * get row from key
     */
-   get(key: any) {
+   get(key: any[]) {
       const start = performance.now()
       console.info(`Get called with key = `, key)
       return new Promise((resolve, _reject) => {
