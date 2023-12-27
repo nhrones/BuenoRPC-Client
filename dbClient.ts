@@ -5,7 +5,7 @@ let { DBServiceURL, DEBUG, registrationURL, requestURL } = CTX
 
 let nextTxID: TxID = 0;
 
-const transactions:Map<number, PromiseType> = new Map();
+const transactions: Map<number, PromiseType> = new Map();
 
 /**
  * This db client communicates with an RPC service.    
@@ -19,7 +19,7 @@ export class DbClient {
     * @param serviceURL - the url for the RPC service
     * @param serviceType - the type of service to register for
     */
-   constructor(serviceURL: string, serviceType: ServiceType, client = "unknown" ) {
+   constructor(serviceURL: string, serviceType: ServiceType, client = "unknown") {
 
       //fix url ending
       DBServiceURL = (serviceURL.endsWith('/'))
@@ -118,17 +118,42 @@ See: readme.md.`)
       })
    }
 
+   // /**
+   //  * get row from key
+   //  */
+   // get(key: string) {
+   //    for (let index = 0; index < this.querySet.length; index++) {
+   //       const element = this.querySet[index];
+   //       //@ts-ignore ?
+   //       if (element.id === key) return element
+   //    }
+   // }
+
    /**
     * get row from key
     */
-   get(key: string) {
-      for (let index = 0; index < this.querySet.length; index++) {
-         const element = this.querySet[index];
-         //@ts-ignore ?
-         if (element.id === key) return element
-      }
-
+   get(key: any) {
+      const start = performance.now()
+      console.info(`Get called with key = `, key)
+      return new Promise((resolve, _reject) => {
+         // persist single record to the service
+         rpcRequest("GET", { key: key })
+            .then((result) => {
+               console.info('GET result ', result)
+               console.info(`GET call returned ${result} in ${performance.now() - start}`)
+               //@ts-ignore ?
+               if (typeof result.value === "string") {
+                  //@ts-ignore ?
+                  resolve(result.value)
+               } else {
+                  //@ts-ignore ?
+                  resolve(JSON.stringify(result.value))
+               }
+            })
+      })
    }
+
+
 
    /** 
     * The `set` method mutates - will call the `persist` method. 
