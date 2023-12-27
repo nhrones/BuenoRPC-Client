@@ -90,7 +90,7 @@ See: readme.md.`)
          // and execute it with the error and result properities.
          // This will resolve or reject the promise that was
          // returned to the client when the call was created.
-         eventSource.onmessage = (evt) => {
+         eventSource.onmessage = (evt: any) => {
             if (DEBUG) console.info('events.onmessage - ', evt.data)
             const parsed = JSON.parse(evt.data);
             const { txID, error, result } = parsed;         // unpack
