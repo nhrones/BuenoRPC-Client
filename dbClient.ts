@@ -28,15 +28,15 @@ export class DbClient {
 
       switch (serviceType) {
          case "IO":
-            registrationURL = DBServiceURL + `SSERPC/ioRegistration?${client}`,
+            registrationURL = DBServiceURL + `SSERPC/ioRegistration?client=${client}`,
                requestURL = DBServiceURL + 'SSERPC/ioRequest'
             break;
          case "KV":
-            registrationURL = DBServiceURL + `SSERPC/kvRegistration?${client}`,
+            registrationURL = DBServiceURL + `SSERPC/kvRegistration?client=${client}`,
                requestURL = DBServiceURL + 'SSERPC/kvRequest'
             break;
          case "RELAY":
-            registrationURL = DBServiceURL + `SSERPC/relayRegistration?${client}`,
+            registrationURL = DBServiceURL + `SSERPC/relayRegistration?client=${client}`,
                requestURL = DBServiceURL + 'SSERPC/relayRequest'
             break;
          default:
