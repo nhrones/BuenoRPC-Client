@@ -19,7 +19,7 @@ export class DbClient {
     * @param serviceURL - the url for the RPC service
     * @param serviceType - the type of service to register for
     */
-   constructor(serviceURL: string, serviceType: ServiceType) {
+   constructor(serviceURL: string, serviceType: ServiceType, client = "unknown" ) {
 
       //fix url ending
       DBServiceURL = (serviceURL.endsWith('/'))
@@ -28,15 +28,15 @@ export class DbClient {
 
       switch (serviceType) {
          case "IO":
-            registrationURL = DBServiceURL + 'SSERPC/ioRegistration',
+            registrationURL = DBServiceURL + `SSERPC/ioRegistration?${client}`,
                requestURL = DBServiceURL + 'SSERPC/ioRequest'
             break;
          case "KV":
-            registrationURL = DBServiceURL + 'SSERPC/kvRegistration',
+            registrationURL = DBServiceURL + `SSERPC/kvRegistration?${client}`,
                requestURL = DBServiceURL + 'SSERPC/kvRequest'
             break;
          case "RELAY":
-            registrationURL = DBServiceURL + 'SSERPC/relayRegistration',
+            registrationURL = DBServiceURL + `SSERPC/relayRegistration?${client}`,
                requestURL = DBServiceURL + 'SSERPC/relayRequest'
             break;
          default:
