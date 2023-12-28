@@ -1,0 +1,10 @@
+{
+   "build": {
+      "Out": "",
+      "FileName": "dbClient.js",
+      "Entry": [
+         "./src/dbClient.ts"
+      ],
+      "Minify": false
+   }
+}
