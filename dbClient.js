@@ -25,13 +25,16 @@ var DbClient = class {
     DBServiceURL = serviceURL.endsWith("/") ? serviceURL : serviceURL += "/";
     switch (serviceType) {
       case "IO":
-        registrationURL = DBServiceURL + `SSERPC/ioRegistration?client=${client}`, requestURL = DBServiceURL + "SSERPC/ioRequest";
+        registrationURL = DBServiceURL + `SSERPC/ioRegistration?client=${client}`;
+        requestURL = DBServiceURL + "SSERPC/ioRequest";
         break;
       case "KV":
-        registrationURL = DBServiceURL + `SSERPC/kvRegistration?client=${client}`, requestURL = DBServiceURL + "SSERPC/kvRequest";
+        registrationURL = DBServiceURL + `SSERPC/kvRegistration?client=${client}`;
+        requestURL = DBServiceURL + "SSERPC/kvRequest";
         break;
       case "RELAY":
-        registrationURL = DBServiceURL + `SSERPC/relayRegistration?client=${client}`, requestURL = DBServiceURL + "SSERPC/relayRequest";
+        registrationURL = DBServiceURL + `SSERPC/relayRegistration?client=${client}`;
+        requestURL = DBServiceURL + "SSERPC/relayRequest";
         break;
       default:
         break;
