@@ -1,6 +1,6 @@
 
-import type { PromiseType, TxID } from './constants.ts'
-
+type TxID = number;
+type PromiseType = (resolve: any, reject: any) => void
 const  DEBUG = false
 let DBServiceURL = ""
 let registrationURL = ""
