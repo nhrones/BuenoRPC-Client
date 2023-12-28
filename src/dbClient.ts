@@ -1,7 +1,12 @@
-// deno-lint-ignore-file no-explicit-any
+
 import type { PromiseType, TxID } from './constants.ts'
-import { CTX, ServiceType } from './context.ts'
-let { DBServiceURL, DEBUG, registrationURL, requestURL } = CTX
+
+const  DEBUG = false
+let DBServiceURL = ""
+let registrationURL = ""
+let requestURL = ""
+
+type ServiceType = "KV"|"IO"|"RELAY"
 
 let nextTxID: TxID = 0;
 

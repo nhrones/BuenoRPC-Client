@@ -1,3 +1,3 @@
 
-export * from './dbClient.ts'
-export * from './constants.ts'
+export * from './src/dbClient.ts'
+export * from './src/constants.ts'
