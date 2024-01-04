@@ -1,7 +1,7 @@
 
 type TxID = number;
 type PromiseType = (resolve: any, reject: any) => void
-const  DEBUG = true
+const  DEBUG = false
 let DBServiceURL = ""
 let registrationURL = ""
 let requestURL = ""
@@ -97,12 +97,12 @@ See: readme.md.`)
          // returned to the client when the call was created.
          eventSource.onmessage = (evt: any) => {
             if (DEBUG) console.info('events.onmessage - ', evt)
-            //const parsed = JSON.parse(evt.data);
-            //const { txID, error, result } = parsed;         // unpack
-            //if (!transactions.has(txID)) return             // check        
-            //const transaction = transactions.get(txID)      // fetch
-            //transactions.delete(txID)                       // clean up
-            //if (transaction) transaction(error, result)     // execute
+            const parsed = JSON.parse(evt.data);
+            const { txID, error, result } = parsed;         // unpack
+            if (!transactions.has(txID)) return             // check        
+            const transaction = transactions.get(txID)      // fetch
+            transactions.delete(txID)                       // clean up
+            if (transaction) transaction(error, result)     // execute
          }
       })
    }
