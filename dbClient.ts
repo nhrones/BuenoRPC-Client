@@ -96,7 +96,7 @@ See: readme.md.`)
          // This will resolve or reject the promise that was
          // returned to the client when the call was created.
          eventSource.onmessage = (evt: any) => {
-            if (DEBUG) console.info('events.onmessage - ', evt.data)
+            if (DEBUG) console.info('events.onmessage - ', evt)
             const parsed = JSON.parse(evt.data);
             const { txID, error, result } = parsed;         // unpack
             if (!transactions.has(txID)) return             // check        
