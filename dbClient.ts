@@ -1,7 +1,7 @@
 
 type TxID = number;
 type PromiseType = (resolve: any, reject: any) => void
-const  DEBUG = false
+const  DEBUG = true
 let DBServiceURL = ""
 let registrationURL = ""
 let requestURL = ""
